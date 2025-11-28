@@ -113,12 +113,13 @@ void incluirContato() {
 
 // Função para listar os contatos ativos
 void consultarContatos() {
+    system("cls");
     if (total_contatos == 0) {
         printf("\nAgenda vazia. Nao ha contatos para listar.\n");
         return;
     }
 
-    printf("\n--- Lista de Contatos (%i encontrados) ---\n", total_contatos);
+    printf("\n--- Lista de Contatos (%i encontrado(s)) ---\n", total_contatos);
     printf("  ID | Nome                                         | Telefone\n");
     printf("-----|----------------------------------------------|----------------\n");
     int encontrado = 0;
