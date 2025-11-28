@@ -17,14 +17,14 @@ typedef struct {
 Contato agenda[MAX_CONTATOS];
 int total_contatos = 0;
 
-// --- Protótipos das Funções ---
+// --- Funções ---
 void mostrarMenu();
 void incluirContato();
 void consultarContatos();
 void excluirContato();
 void inicializarAgenda();
 
-// --- Função Principal (main) ---
+// --- Função Principal ---
 int main() {
     int opcao;
     inicializarAgenda();
@@ -32,8 +32,7 @@ int main() {
     do {
         mostrarMenu();
         printf("Escolha uma opcao: ");
-        if (scanf("%d", &opcao) != 1) {
-            // Limpa o buffer de entrada em caso de falha (entrada não numérica)
+        if (scanf("%i", &opcao) != 1) { // Limpa o buffer de entrada
             while (getchar() != '\n');
             opcao = 0; // Define uma opção inválida
         }
@@ -58,9 +57,6 @@ int main() {
 
     return 0;
 }
-// 
-
-// --- Implementação das Funções ---
 
 // Inicializa o array de contatos
 void inicializarAgenda() {
@@ -70,14 +66,14 @@ void inicializarAgenda() {
     }
 }
 
-// Mostra as opções do menu
+// Opções do menu
 void mostrarMenu() {
     printf("\n--- Agenda de Contatos ---\n");
     printf("1. Incluir Contato\n");
     printf("2. Consultar Contatos (Listar)\n");
     printf("3. Excluir Contato\n");
     printf("4. Sair\n");
-    printf("--------------------------\n");
+    printf("----------------------------\n");
 }
 
 // Função para incluir um novo contato
@@ -115,14 +111,14 @@ void incluirContato() {
     system("cls");
 }
 
-// Função para listar todos os contatos ativos
+// Função para listar os contatos ativos
 void consultarContatos() {
     if (total_contatos == 0) {
         printf("\nAgenda vazia. Nao ha contatos para listar.\n");
         return;
     }
 
-    printf("\n--- Lista de Contatos (%d encontrados) ---\n", total_contatos);
+    printf("\n--- Lista de Contatos (%i encontrados) ---\n", total_contatos);
     printf("  ID | Nome                                         | Telefone\n");
     printf("-----|----------------------------------------------|----------------\n");
     int encontrado = 0;
@@ -139,7 +135,7 @@ void consultarContatos() {
     printf("---------------------------------------------------------------------\n");
 }
 
-// Função para "excluir" um contato (marcar como inativo)
+// Função para excluir um contato (marcar como inativo)
 void excluirContato() {
     int id;
 
@@ -148,11 +144,11 @@ void excluirContato() {
         return;
     }
     
-    // Lista os contatos para que o usuário saiba qual ID escolher
+    // Lista os contatos para que o usuário escolha o ID
     consultarContatos(); 
     
     printf("\n--- Excluir Contato ---\n");
-    printf("Digite o ID do contato a ser excluido (1 a %d): ", MAX_CONTATOS);
+    printf("Digite o ID do contato a ser excluido (1 a %i): ", MAX_CONTATOS);
     if (scanf("%d", &id) != 1) {
         printf("ID invalido.\n");
         // Limpa o buffer de entrada
@@ -166,15 +162,12 @@ void excluirContato() {
     if (indice >= 0 && indice < MAX_CONTATOS && agenda[indice].ativo == 1) {
         printf("Tem certeza que deseja excluir o contato '%s'? (s/n): ", agenda[indice].nome);
         char confirmacao;
-        // Limpa o buffer antes de ler a confirmação
+        // Limpa o buffer
         while (getchar() != '\n'); 
         scanf(" %c", &confirmacao);
 
         if (confirmacao == 's' || confirmacao == 'S') {
             agenda[indice].ativo = 0; // Marca como inativo (excluído)
-            // Opcional: limpar os dados, mas marcar como inativo já basta para a lógica.
-            // memset(agenda[indice].nome, 0, MAX_NOME); 
-            // memset(agenda[indice].telefone, 0, MAX_TELEFONE);
             
             total_contatos--;
             printf("Contato '%s' excluido com sucesso!\n", agenda[indice].nome);
