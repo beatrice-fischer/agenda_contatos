@@ -48,6 +48,7 @@ int main() {
                 excluirContato();
                 break;
             case 4:
+                system("cls");
                 printf("\nSaindo da agenda de contatos. Ate logo!\n");
                 break;
             default:
@@ -101,9 +102,8 @@ void incluirContato() {
     agenda[i].nome[strcspn(agenda[i].nome, "\n")] = 0; 
 
     printf("Telefone: ");
-    fgets(agenda[i].telefone, MAX_TELEFONE, stdin);
-    // Remove o '\n' lido pelo fgets
-    agenda[i].telefone[strcspn(agenda[i].telefone, "\n")] = 0; 
+    fgets(agenda[i].telefone, MAX_TELEFONE, stdin); 
+    agenda[i].telefone[strcspn(agenda[i].telefone, "\n")] = 0; // Remove o '\n' lido pelo fgets
 
     agenda[i].ativo = 1;
     total_contatos++;
@@ -126,7 +126,7 @@ void consultarContatos() {
     int i;
     for (i = 0; i < MAX_CONTATOS; i++) {
         if (agenda[i].ativo == 1) {
-            printf(" %3d | %-44s | %s\n", i + 1, agenda[i].nome, agenda[i].telefone);
+            printf(" %3i | %-44s | %s\n", i + 1, agenda[i].nome, agenda[i].telefone);
             encontrado = 1;
         }
     }
@@ -150,7 +150,7 @@ void excluirContato() {
     
     printf("\n--- Excluir Contato ---\n");
     printf("Digite o ID do contato a ser excluido (1 a %i): ", MAX_CONTATOS);
-    if (scanf("%d", &id) != 1) {
+    if (scanf("%i", &id) != 1) {
         printf("ID invalido.\n");
         // Limpa o buffer de entrada
         while (getchar() != '\n');
