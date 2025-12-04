@@ -1,25 +1,26 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
+#include <stdio.h> //Biblioteca padrão de entrada e saída, usada para printf, scanf etc
+#include <stdlib.h> //Biblioteca padrão para funções utilitárias como system() e gerenciamento de memória
+#include <string.h> //Biblioteca para manipulação de strings, como strlen, strcmp, strcspn.
+#include <time.h> //Biblioteca para data e hora
 
 // --- Definição da Estrutura de Contato ---
+//Número máximo de contatos; caractéres do nome; caractéres do telefone
 #define MAX_CONTATOS 100
 #define MAX_NOME 50
 #define MAX_TELEFONE 15
 #define NOME_ARQUIVO "agenda.dat" // Nome do arquivo de dados
 
-typedef struct {
-    char nome[MAX_NOME];
-    char telefone[MAX_TELEFONE];
+typedef struct { //cria um tipo chamado Contato, permitindo criar variáveis desse tipo
+    char nome[MAX_NOME]; // Armazena o nome do contato
+    char telefone[MAX_TELEFONE]; // Armazena o telefone do contato
     int ativo; // 1 para ativo, 0 para excluido/vazio
 } Contato;
 
 // Variável global para a agenda e o contador de contatos
-Contato agenda[MAX_CONTATOS];
-int total_contatos = 0;
+Contato agenda[MAX_CONTATOS]; // Array que armazena todos os contatos da agenda
+int total_contatos = 0; // Contador do número de contatos ativos, agenda cheia ou vazia
 
-// --- Funções ---
+// --- Funções --- Protótipos são declarações que permitem usar funções antes de defini-las.
 void mostrarMenu();
 void incluirContato();
 void consultarContatos();
@@ -30,19 +31,19 @@ void salvarAgenda();
 
 // --- Função Principal ---
 int main() {
-    int opcao;
-    carregarAgenda();
-    system("mode con: cols=82");
-    system ("color E5");
+    int opcao; // Armazena a opção do usuário
+    carregarAgenda(); // Carrega contatos do arquivo, se existir
+    system("mode con: cols=82"); // Executa comando no Windows para definir a largura da janela do console (ou prompt de comando)
+    system ("color E5"); // Altera a cor do console
 
     // --- Lógica de Data e Hora ---
-    time_t t;
-    struct tm *infoTempo;
-    char buffer[80];
+    time_t t; // Declara uma variável chamada t do tipo time_t (dado aritmético)
+    struct tm *infoTempo; // Declara um ponteiro "infoTempo" para uma estrutura do tipo struct tm - data e hora detalhada
+    char buffer[80]; // Quantidade de caracteres do vetor
     time(&t); // Obtém o tempo atual em segundos desde 1970
     infoTempo = localtime(&t); // Converte para a estrutura de tempo local
     strftime(buffer, 80, "%d/%m/%Y %H:%M:%S", infoTempo); // Formato: Dia/Mês/Ano Hora:Min:Seg
-    
+
     printf("\n ================================================================================\n");
     printf(" ==                                                                            ==\n");
     printf(" ==                              AGENDA DE CONTATOS                            ==\n");
@@ -54,16 +55,16 @@ int main() {
     do {
         mostrarMenu();
         printf("                          Escolha uma opcao: ");
-        if (scanf("%i", &opcao) != 1) { // Limpa o buffer de entrada
+        if (scanf("%i", &opcao) != 1) { // Limpa o buffer de entrada se não ler um número inteiro
             while (getchar() != '\n');
             opcao = 0; // Define uma opção inválida
         }
 
-        switch (opcao) {
+        switch (opcao) { // Verifica a opção digitada pelo usuário
             case 1:
                 system ("color FD");
-                system("cls");
-                incluirContato();
+                system("cls"); // Limpa a tela
+                incluirContato(); // Chama a função 
                 break;
             case 2:
                 system ("color FD");
@@ -82,7 +83,7 @@ int main() {
             default:
                 printf("\n                          Opcao invalida. Por favor, escolha uma opcao entre 1 e 4.\n");
         }
-    } while (opcao != 4);
+    } while (opcao != 4); // Repete até o usuário escolher sair.
 
     return 0;
 }
@@ -100,12 +101,11 @@ void carregarAgenda() {
     // Lê todo o array 'agenda' (MAX_CONTATOS de Contato) do arquivo
     size_t lidos = fread(agenda, sizeof(Contato), MAX_CONTATOS, arquivo);
     
-    fclose(arquivo);
+    fclose(arquivo); // Lê todos os contatos do arquivo e fecha o arquivo
 
-    // Reconta os contatos ativos após a leitura
     total_contatos = 0;
     int i;
-    for (i = 0; i < MAX_CONTATOS; i++) {
+    for (i = 0; i < MAX_CONTATOS; i++) { // Reconta os contatos ativos após a leitura
         if (agenda[i].ativo == 1) {
             total_contatos++;
         }
@@ -118,7 +118,7 @@ void carregarAgenda() {
 void salvarAgenda() {
     FILE *arquivo = fopen(NOME_ARQUIVO, "wb"); // Abre para escrita binária ('wb')
     
-    if (arquivo == NULL) {
+    if (arquivo == NULL) { // Se não conseguir abrir
         printf("                          Erro ao abrir o arquivo para salvar. Os dados nao foram persistidos.\n");
         return;
     }
@@ -134,7 +134,7 @@ void salvarAgenda() {
 void inicializarAgenda() {
     int i;
     for (i = 0; i < MAX_CONTATOS; i++) {
-        agenda[i].ativo = 0;
+        agenda[i].ativo = 0; // Marca todas as posições como vazias.
     }
 }
 
@@ -149,7 +149,7 @@ void mostrarMenu() {
 }
 
 // Validação
-int contemNumeros(const char *str) {
+int contemNumeros(const char *str) { // Função não pode modificar o conteúdo original, de ponteiro caractere, com variável local "str"
     int i;
     for (i = 0; str[i] != '\0'; i++) {
         // Verifica se o caractere é um dígito de '0' a '9'
@@ -173,7 +173,7 @@ int validarTelefone(const char *telefone) {
 
 // Função para incluir um novo contato
 void incluirContato() {
-    if (total_contatos >= MAX_CONTATOS) {
+    if (total_contatos >= MAX_CONTATOS) { // Verifica se a agenda está cheia
         printf("\n                          Agenda cheia! Nao e possivel incluir mais contatos.\n");
         return;
     }
@@ -186,7 +186,7 @@ void incluirContato() {
         }
     }
     
-    char nomeTemp[MAX_NOME];
+    char nomeTemp[MAX_NOME]; //variável temporária
     char telTemp[MAX_TELEFONE];
 
     // Limpa o buffer antes de ler strings
@@ -194,7 +194,7 @@ void incluirContato() {
 
 printf("\n                          ===== Incluir Contato ===== \n");
     printf("                          Nome: ");
-    fgets(nomeTemp, MAX_NOME, stdin);
+    fgets(nomeTemp, MAX_NOME, stdin); // Lê nome
     nomeTemp[strcspn(nomeTemp, "\n")] = 0; // Remove '\n'
 
     if (strlen(nomeTemp) < 3) { // Nome muito curto
@@ -207,7 +207,7 @@ printf("\n                          ===== Incluir Contato ===== \n");
     }
 
     printf("                          Telefone (somente numeros): ");
-    fgets(telTemp, MAX_TELEFONE, stdin);
+    fgets(telTemp, MAX_TELEFONE, stdin); // Lê telefone
     telTemp[strcspn(telTemp, "\n")] = 0; // Remove '\n'
 
     if (strlen(telTemp) < 8) { // Telefone muito curto
@@ -223,8 +223,8 @@ printf("\n                          ===== Incluir Contato ===== \n");
     strcpy(agenda[i].nome, nomeTemp); 
     strcpy(agenda[i].telefone, telTemp);
 
-    agenda[i].ativo = 1;
-    total_contatos++;
+    agenda[i].ativo = 1; // Marca contato como ativo
+    total_contatos++; // Incrementa contador
     printf("Contato '%s' incluido com sucesso!\n", agenda[i].nome);
     system("cls");
 }
@@ -232,7 +232,7 @@ printf("\n                          ===== Incluir Contato ===== \n");
 // Função para listar os contatos ativos
 void consultarContatos() {
     system("cls");
-    if (total_contatos == 0) {
+    if (total_contatos == 0) { // Se não houver contatos
         printf("\n                          Agenda vazia. Nao ha contatos para listar.\n");
         return;
     }
@@ -245,6 +245,7 @@ void consultarContatos() {
     for (i = 0; i < MAX_CONTATOS; i++) {
         if (agenda[i].ativo == 1) {
             printf("     %3i | %-44s   | %s\n", i + 1, agenda[i].nome, agenda[i].telefone);
+            // %-44s alinha o nome à esquerda em um espaço de 44 caracteres.
             encontrado = 1;
         }
     }
@@ -258,7 +259,7 @@ void consultarContatos() {
 void excluirContato() {
     int id;
 
-    if (total_contatos == 0) {
+    if (total_contatos == 0) { // Verifica se há contatos
         printf("\n                          Agenda vazia. Nao ha contatos para excluir.\n");
         return;
     }
@@ -268,7 +269,7 @@ void excluirContato() {
     
     printf("\n                          ===== Excluir Contato ===== \n");
     printf("\n                          Digite o ID do contato (1 a %i): ", MAX_CONTATOS);
-    if (scanf("%i", &id) != 1) {
+    if (scanf("%i", &id) != 1) { // Verifica se digitou um número
         printf("                          ID invalido.\n");
         // Limpa o buffer de entrada
         while (getchar() != '\n');
@@ -278,17 +279,17 @@ void excluirContato() {
     // Ajusta o ID para o índice do array (ID 1 -> índice 0)
     int indice = id - 1;
 
-    if (indice >= 0 && indice < MAX_CONTATOS && agenda[indice].ativo == 1) {
+    if (indice >= 0 && indice < MAX_CONTATOS && agenda[indice].ativo == 1) { //Permite ao usuário confirmar exclusão
         printf("                          Tem certeza que deseja excluir\n                          o contato '%s'? (s/n): ", agenda[indice].nome);
         char confirmacao;
         // Limpa o buffer
-        while (getchar() != '\n'); 
+        while (getchar() != '\n'); // Limpa o buffer
         scanf(" %c", &confirmacao);
 
-        if (confirmacao == 's' || confirmacao == 'S') {
+        if (confirmacao == 's' || confirmacao == 'S') { 
             agenda[indice].ativo = 0; // Marca como inativo (excluído)
             
-            total_contatos--;
+            total_contatos--; // Decrementa contador
             printf("                          Contato '%s' excluido com sucesso!\n", agenda[indice].nome);
         } else {
             printf("                          Exclusao cancelada.\n");
