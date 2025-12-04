@@ -32,6 +32,7 @@ void salvarAgenda();
 int main() {
     int opcao;
     carregarAgenda();
+    system("mode con: cols=82");
     system ("color E5");
 
     // --- Lógica de Data e Hora ---
@@ -41,7 +42,7 @@ int main() {
     time(&t); // Obtém o tempo atual em segundos desde 1970
     infoTempo = localtime(&t); // Converte para a estrutura de tempo local
     strftime(buffer, 80, "%d/%m/%Y %H:%M:%S", infoTempo); // Formato: Dia/Mês/Ano Hora:Min:Seg
-    system("mode con: cols=82");
+    
     printf("\n ================================================================================\n");
     printf(" ==                                                                            ==\n");
     printf(" ==                              AGENDA DE CONTATOS                            ==\n");
