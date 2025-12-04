@@ -278,7 +278,7 @@ void excluirContato() {
     int indice = id - 1;
 
     if (indice >= 0 && indice < MAX_CONTATOS && agenda[indice].ativo == 1) {
-        printf("                          Tem certeza que deseja excluir\n             11             o contato '%s'? (s/n): ", agenda[indice].nome);
+        printf("                          Tem certeza que deseja excluir\n                          o contato '%s'? (s/n): ", agenda[indice].nome);
         char confirmacao;
         // Limpa o buffer
         while (getchar() != '\n'); 
