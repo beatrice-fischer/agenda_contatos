@@ -41,7 +41,7 @@ int main() {
     time(&t); // Obtém o tempo atual em segundos desde 1970
     infoTempo = localtime(&t); // Converte para a estrutura de tempo local
     strftime(buffer, 80, "%d/%m/%Y %H:%M:%S", infoTempo); // Formato: Dia/Mês/Ano Hora:Min:Seg
-
+    system("mode con: cols=82");
     printf("\n ================================================================================\n");
     printf(" ==                                                                            ==\n");
     printf(" ==                              AGENDA DE CONTATOS                            ==\n");
@@ -278,7 +278,7 @@ void excluirContato() {
     int indice = id - 1;
 
     if (indice >= 0 && indice < MAX_CONTATOS && agenda[indice].ativo == 1) {
-        printf("                          Tem certeza que deseja excluir o contato '%s'? (s/n): ", agenda[indice].nome);
+        printf("                          Tem certeza que deseja excluir\n             11             o contato '%s'? (s/n): ", agenda[indice].nome);
         char confirmacao;
         // Limpa o buffer
         while (getchar() != '\n'); 
